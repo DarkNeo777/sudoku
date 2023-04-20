@@ -51,7 +51,7 @@ var colors2 = [
     "#fbcfe8"
 ]
 
-window.onload = function() {
+window.onload = function () {
     setGame();
 }
 
@@ -63,13 +63,13 @@ function setGame() {
         let hue = document.createElement("div");
         number.id = i;
         hue.id = i;
-        
+
         hue.style.backgroundColor = colors[i - 1];
         number.innerText = i;
         hue.innerText = i;
         number.addEventListener("click", selectNumber);
         hue.addEventListener("click", hueSelector);
-        
+
         number.classList.add("number");
         hue.classList.add("hue");
         document.getElementById("digits").appendChild(number);
@@ -98,15 +98,15 @@ function setGame() {
     }
 }
 
-function selectNumber(){
+function selectNumber() {
     if (numSelected != null) {
         numSelected.classList.remove("number-selected");
     }
     numSelected = this;
     numSelected.classList.add("number-selected");
 }
-function hueSelector(){
-    let cooler = this.id - 1; 
+function hueSelector() {
+    let cooler = this.id - 1;
     document.getElementById("board").style.backgroundColor = colors[cooler];
     console.log(colors2[cooler]);
     document.querySelector("body").style.backgroundColor = colors2[cooler];
@@ -137,22 +137,10 @@ function selectTile() {
 }
 
 function solver() {
-
     for (let r = 0; r < 9; r++) {
         for (let c = 0; c < 9; c++) {
-            let tile = document.createElement("div");
-            tile.id = r.toString() + "-" + c.toString();
-            tile.innerText = solution[r][c];
-            
-            if (r == 2 || r == 5) {
-                tile.classList.add("horizontal-line");
-            }
-            if (c == 2 || c == 5) {
-                tile.classList.add("vertical-line");
-            }
-            tile.addEventListener("click", selectTile);
-            tile.classList.add("tile");
-            document.getElementById("board").append(tile);
+            let name = r.toString() + "-" + c.toString();
+            document.getElementById(name).innerText = solution[r][c];            
         }
     }
 }
