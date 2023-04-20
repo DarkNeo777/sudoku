@@ -1,3 +1,4 @@
+
 var numSelected = null;
 var tileSelected = null;
 
@@ -27,89 +28,131 @@ var solution = [
     "812945763"
 ]
 
-window.onload = function () {
+var colors = [
+    "#94a3b8",
+    "#f87171",
+    "#fbbf24",
+    "#a3e635",
+    "#4ade80",
+    "#2dd4bf",
+    "#38bdf8",
+    "#a78bfa",
+    "#f472b6"
+]
+var colors2 = [
+    "#e2e8f0",
+    "#fecaca",
+    "#fde68a",
+    "#d9f99d",
+    "#bbf7d0",
+    "#99f6e4",
+    "#7dd3fc",
+    "#ddd6fe",
+    "#fbcfe8"
+]
+
+window.onload = function() {
     setGame();
 }
-var colors = [
-    "#64748b",
-    "#ef4444",
-    "#f59e0b",
-    "#84cc16",
-    "#22c55e",
-    "#14b8a6",
-    "#0ea5e9",
-    "#8b5cf6",
-    "#ec4899"
-]
+
 function setGame() {
-    //digit 1-9 
-    for(let i = 1; i<=9; i++) {
+    // Digits 1-9
+    for (let i = 1; i <= 9; i++) {
+        //<div id="1" class="number">1</div>
         let number = document.createElement("div");
-        let hues = document.createElement("div");
-        
-        hues.style.backgroundColor = colors[i-1];
-        hues.id = i;
+        let hue = document.createElement("div");
         number.id = i;
-
-        //hues.innerText = i;
+        hue.id = i;
+        
+        hue.style.backgroundColor = colors[i - 1];
         number.innerText = i;
-
-        number.addEventListener("click", selectedNumber);
+        hue.innerText = i;
+        number.addEventListener("click", selectNumber);
+        hue.addEventListener("click", hueSelector);
         
         number.classList.add("number");
-        hues.classList.add("hues");
-        
+        hue.classList.add("hue");
         document.getElementById("digits").appendChild(number);
-        document.getElementById("hue").appendChild(hues);
-
+        document.getElementById("hues").appendChild(hue);
     }
 
-    //board9x9
-    for(let r = 0; r < 9; r++){
-        for(let c= 0; c < 9; c++){
+    // Board 9x9
+    for (let r = 0; r < 9; r++) {
+        for (let c = 0; c < 9; c++) {
             let tile = document.createElement("div");
             tile.id = r.toString() + "-" + c.toString();
-            if(board[r][c] != "-"){
+            if (board[r][c] != "-") {
                 tile.innerText = board[r][c];
                 tile.classList.add("tile-start");
             }
-            if(r == 2 || r == 5){
+            if (r == 2 || r == 5) {
                 tile.classList.add("horizontal-line");
             }
-            if(c == 2 || c == 5) {
+            if (c == 2 || c == 5) {
                 tile.classList.add("vertical-line");
             }
-            tile.addEventListener("click", selectedTile)
+            tile.addEventListener("click", selectTile);
             tile.classList.add("tile");
             document.getElementById("board").append(tile);
         }
     }
 }
-function selectedNumber() {
-    if(numSelected != null) {
+
+function selectNumber(){
+    if (numSelected != null) {
         numSelected.classList.remove("number-selected");
     }
     numSelected = this;
     numSelected.classList.add("number-selected");
 }
+function hueSelector(){
+    let cooler = this.id - 1; 
+    document.getElementById("board").style.backgroundColor = colors[cooler];
+    console.log(colors2[cooler]);
+    document.querySelector("body").style.backgroundColor = colors2[cooler];
+    //document.getElements("shifter").style.backgroundColor = colors2[cooler];
+}
 
-function selectedTile() {
-    if(numSelected) {
-        if(this.innerText != "") {
+
+
+function selectTile() {
+    if (numSelected) {
+        if (this.innerText != "") {
             return;
         }
 
-        //coordinatess
-        let coords = this.id.split("-");
+        // "0-0" "0-1" .. "3-1"
+        let coords = this.id.split("-"); //["0", "0"]
         let r = parseInt(coords[0]);
         let c = parseInt(coords[1]);
 
-        if(solution[r][c] == numSelected.id) {
+        if (solution[r][c] == numSelected.id) {
             this.innerText = numSelected.id;
         }
         else {
             errors += 1;
             document.getElementById("errors").innerText = errors;
+        }
+    }
+}
+
+function solver() {
+
+    for (let r = 0; r < 9; r++) {
+        for (let c = 0; c < 9; c++) {
+            let tile = document.createElement("div");
+            tile.id = r.toString() + "-" + c.toString();
+            tile.innerText = solution[r][c];
+            
+            if (r == 2 || r == 5) {
+                tile.classList.add("horizontal-line");
+            }
+            if (c == 2 || c == 5) {
+                tile.classList.add("vertical-line");
+            }
+            tile.addEventListener("click", selectTile);
+            tile.classList.add("tile");
+            document.getElementById("board").append(tile);
         }
     }
 }
